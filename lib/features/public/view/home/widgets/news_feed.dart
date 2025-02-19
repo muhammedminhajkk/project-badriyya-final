@@ -7,7 +7,7 @@ class NewsFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 120,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -21,26 +21,25 @@ class NewsFeed extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Left Side (Text)
           const Expanded(
-            flex: 6,
+            flex: 17,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "ബദ്രിയ്യ നെഡിയനാട് സമ്മേളനം",
-                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   "മേയ് 02. 03. 04",
-                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   "നരിക്കുനി: നെഡിയനാട് ബദ്രിയ വാര്ഷിക സമ്മേളനം \"ഗ്രാറ്റോണിയം\" 2025 മേയ് 2,3,4 തീയതികളിൽ കാർക്കുളം ദർസിൽ നടക്കും. സി.അബ്ദുറഹ്മാൻ..",
-                  style: TextStyle(fontSize: 8, color: Colors.black),
-                  maxLines: 3, // Limiting the text to 2 lines
-                  overflow: TextOverflow
-                      .ellipsis, // Adding ellipsis if the text overflows
+                  style: TextStyle(fontSize: 9, color: Colors.black),
+                  maxLines: 2, // Limiting the text to 2 lines
+                  // overflow: TextOverflow
+                  //     .ellipsis, // Adding ellipsis if the text overflows
                   softWrap: true, // Allowing the text to wrap
                 ),
                 Row(
@@ -59,7 +58,7 @@ class NewsFeed extends StatelessWidget {
             width: 10,
           ),
           Expanded(
-            flex: 4,
+            flex: 8,
             child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(

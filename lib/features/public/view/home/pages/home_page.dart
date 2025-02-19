@@ -16,8 +16,8 @@ class HomePage extends StatelessWidget {
         children: [
           Expanded(flex: 25, child: TopImageBuilder()),
           SizedBox(height: 20),
-          Expanded(flex: 13, child: HighLights()),
-          Expanded(flex: 36, child: NewsFeedBuilder())
+          Expanded(flex: 14, child: HighLights()),
+          Expanded(flex: 35, child: NewsFeedBuilder())
         ],
       ),
     );

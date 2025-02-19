@@ -4,7 +4,7 @@ class GradientText extends StatelessWidget {
   final String text;
   final double size;
 
-  const GradientText(this.text, {super.key, this.size = 12});
+  const GradientText(this.text, {super.key, this.size = 20});
 
   @override
   Widget build(BuildContext context) {

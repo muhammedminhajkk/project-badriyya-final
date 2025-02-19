@@ -25,7 +25,7 @@ class NewsFeedBuilder extends StatelessWidget {
           height: 30,
           width: double.infinity,
           child: const Padding(
-            padding: EdgeInsets.only(left: 12.0),
+            padding: EdgeInsets.only(left: 12.0, top: 2),
             child: GradientText("Updates"),
           ),
         ),
@@ -33,7 +33,7 @@ class NewsFeedBuilder extends StatelessWidget {
           children: [
             Expanded(child: SizedBox()),
             Padding(
-              padding: EdgeInsets.only(left: 50, right: 50, bottom: 24),
+              padding: EdgeInsets.only(left: 50, right: 50, bottom: 10),
               child: CustomBottomNavigationBar(currentIndex: 0),
             ),
           ],

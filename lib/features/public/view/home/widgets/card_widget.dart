@@ -31,7 +31,7 @@ class CardWidget extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -45,7 +45,7 @@ class CardWidget extends StatelessWidget {
                   const Expanded(
                     child: Text(
                       "Dolor sit amet,consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                      style: TextStyle(color: Colors.white, fontSize: 8),
+                      style: TextStyle(color: Colors.white, fontSize: 10),
                       maxLines: 3,
                       overflow: TextOverflow
                           .ellipsis, // Add ellipsis if text overflows

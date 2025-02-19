@@ -9,69 +9,58 @@ class MorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Center(
-                    child: Image.asset(
-                      "assets/blackicon.png",
-                    ),
-                  ),
-                ),
-                Expanded(
-                  // flex: 2,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 24.0, right: 24, top: 12),
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 18, right: 18),
-                      decoration: BoxDecoration(
-                          color: const Color.fromARGB(236, 236, 236, 255),
-                          // rgba(236, 236, 236, 1)
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Row(
-                        children: [
-                          // SizedBox(
-                          //   width: 20,
-                          // ),
-                          Text(
-                            "Search Here",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Expanded(
-                            child: SizedBox(),
-                          ),
-                          Icon(Icons.search)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const Expanded(
-                  flex: 10,
-                  child: Padding(
-                    padding: EdgeInsets.all(24.0),
-                    child: MoreBuilder(),
-                  ),
-                )
-              ],
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            flex: 5,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 50.0),
+              child: Image.asset(
+                "assets/blackicon.png",
+              ),
             ),
-            const Column(
-              children: [
-                Expanded(child: SizedBox()),
-                Padding(
-                  padding: EdgeInsets.only(left: 50, right: 50, bottom: 24),
-                  child: CustomBottomNavigationBar(currentIndex: 1),
+          ),
+          Expanded(
+            // flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24.0, right: 24, top: 12),
+              child: Container(
+                padding: const EdgeInsets.only(left: 18, right: 18),
+                decoration: BoxDecoration(
+                    color: const Color.fromARGB(236, 236, 236, 255),
+                    // rgba(236, 236, 236, 1)
+                    borderRadius: BorderRadius.circular(10)),
+                child: const Row(
+                  children: [
+                    // SizedBox(
+                    //   width: 20,
+                    // ),
+                    Text(
+                      "Search Here",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Icon(Icons.search)
+                  ],
                 ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ),
+          ),
+          const Expanded(
+            flex: 10,
+            child: Padding(
+              padding: EdgeInsets.only(left: 24.0, right: 24),
+              child: MoreBuilder(),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 50, right: 50, bottom: 10),
+            child: CustomBottomNavigationBar(currentIndex: 1),
+          )
+        ],
       ),
     );
   }

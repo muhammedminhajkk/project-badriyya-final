@@ -6,82 +6,56 @@ class UstadMemorialDars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
         children: [
-          Container(
-            height: 200,
-            width: double.infinity,
-            color: Colors.black, // Replacing the image with a color
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 250,
+                width: double.infinity,
+                color: Colors.red, // Replacing the image with a color
+              ),
+              Padding(
+                padding: EdgeInsets.all(24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                            ),
-                          ),
-                        ),
-                        child: const Text("Contact"),
-                      ),
+                    SizedBox(height: 16),
+                    Text(
+                      "C Usthad Memorial Dars",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      width: 1,
-                      height: 40,
-                      color: Colors.white,
+                    SizedBox(height: 8),
+                    Text(
+                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
                     ),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(20),
-                              bottomRight: Radius.circular(20),
-                            ),
-                          ),
-                        ),
-                        child: const Text("Gallery"),
-                      ),
+                    SizedBox(height: 16),
+                    Text(
+                      "• 100+ Students\n"
+                      "• 11+ Academic Staff\n"
+                      "• 6+ Non-Teaching Staff",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.teal),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                const Text(
-                  "C Usthad Memorial Dars",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                  style: TextStyle(fontSize: 14, color: Colors.black54),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  "• 100+ Students\n"
-                  "• 11+ Academic Staff\n"
-                  "• 6+ Non-Teaching Staff",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.teal),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
+          Positioned(
+            top: 240,
+            child: Container(
+              color: Colors.green,
+              child: Row(
+                children: [Text("Contact"), Text("Gallery")],
+              ),
+            ),
+          )
         ],
       ),
     );

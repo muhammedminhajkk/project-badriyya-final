@@ -30,25 +30,33 @@ class Institution extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Column(
           children: [
-            InstitutionCard(
-              name: "Usthad Memorial Dars",
-              color: Colors.blueGrey,
-              root: UstadMemorialDars(),
+            Expanded(
+              child: InstitutionCard(
+                name: "Usthad Memorial Dars",
+                color: Colors.blueGrey,
+                root: UstadMemorialDars(),
+              ),
             ),
-            InstitutionCard(
-              name: "Youth School",
-              color: Colors.brown,
-              root: UstadMemorialDars(),
+            Expanded(
+              child: InstitutionCard(
+                name: "Youth School",
+                color: Colors.brown,
+                root: UstadMemorialDars(),
+              ),
             ),
-            InstitutionCard(
-              name: "Girls Model Academy",
-              color: Colors.green,
-              root: UstadMemorialDars(),
+            Expanded(
+              child: InstitutionCard(
+                name: "Girls Model Academy",
+                color: Colors.green,
+                root: UstadMemorialDars(),
+              ),
             ),
-            InstitutionCard(
-              name: "Secondary Madrasa",
-              color: Colors.orange,
-              root: UstadMemorialDars(),
+            Expanded(
+              child: InstitutionCard(
+                name: "Secondary Madrasa",
+                color: Colors.orange,
+                root: UstadMemorialDars(),
+              ),
             ),
           ],
         ),

@@ -21,7 +21,7 @@ class InstitutionCard extends StatelessWidget {
         },
         child: Container(
           width: double.infinity,
-          height: 160,
+          // height: 160,
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(12),
