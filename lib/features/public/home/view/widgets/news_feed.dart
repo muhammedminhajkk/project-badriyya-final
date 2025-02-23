@@ -28,18 +28,24 @@ class NewsFeed extends StatelessWidget {
               children: [
                 Text(
                   "ബദ്രിയ്യ നെഡിയനാട് സമ്മേളനം",
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  maxLines: 1,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   "മേയ് 02. 03. 04",
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  maxLines: 1,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   "നരിക്കുനി: നെഡിയനാട് ബദ്രിയ വാര്ഷിക സമ്മേളനം \"ഗ്രാറ്റോണിയം\" 2025 മേയ് 2,3,4 തീയതികളിൽ കാർക്കുളം ദർസിൽ നടക്കും. സി.അബ്ദുറഹ്മാൻ..",
-                  style: TextStyle(fontSize: 9, color: Colors.black),
+                  style: TextStyle(fontSize: 10, color: Colors.black),
                   maxLines: 2, // Limiting the text to 2 lines
-                  // overflow: TextOverflow
-                  //     .ellipsis, // Adding ellipsis if the text overflows
+                  overflow: TextOverflow
+                      .ellipsis, // Adding ellipsis if the text overflows
                   softWrap: true, // Allowing the text to wrap
                 ),
                 Row(

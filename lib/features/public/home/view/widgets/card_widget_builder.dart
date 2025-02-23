@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:project_badriyya/features/public/view/home/widgets/card_widget.dart';
+import 'package:project_badriyya/features/public/home/view/widgets/card_widget.dart';
 
 class HighLights extends StatefulWidget {
   const HighLights({super.key});
@@ -12,7 +12,7 @@ class HighLights extends StatefulWidget {
 
 class HighLightsState extends State<HighLights> {
   PageController _pageController = PageController(viewportFraction: 0.7);
-  int _currentPage = 0;
+  int _currentPage = 1;
   Timer? _timer;
 
   final List<Widget> _cards = [

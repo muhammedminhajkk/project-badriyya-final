@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_badriyya/features/public/view/home/widgets/custom_bottom_navigation_bar.dart';
+import 'package:project_badriyya/features/public/home/view/widgets/custom_bottom_navigation_bar.dart';
 
 class Profile extends StatelessWidget {
   static const routePath = '/profile';

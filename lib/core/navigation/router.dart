@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
-import 'package:project_badriyya/features/public/view/home/pages/home_page.dart';
-import 'package:project_badriyya/features/public/view/more/pages/more_page.dart';
-import 'package:project_badriyya/features/public/view/profile/pages/profile.dart';
+import 'package:project_badriyya/features/public/home/view/pages/home_page.dart';
+import 'package:project_badriyya/features/public/more/view/pages/more_page.dart';
+import 'package:project_badriyya/features/public/profile/view/pages/profile.dart';
 import 'package:project_badriyya/main.dart';
 
 final router = GoRouter(

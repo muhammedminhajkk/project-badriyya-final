@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project_badriyya/features/public/view/home/widgets/custom_bottom_navigation_bar.dart';
-import 'package:project_badriyya/features/public/view/home/widgets/news_feed.dart';
-import 'package:project_badriyya/features/public/view/home/widgets/update_text.dart';
+import 'package:project_badriyya/features/public/home/view/widgets/custom_bottom_navigation_bar.dart';
+import 'package:project_badriyya/features/public/home/view/widgets/news_feed.dart';
+import 'package:project_badriyya/features/public/home/view/widgets/update_text.dart';
 
 class NewsFeedBuilder extends StatelessWidget {
   const NewsFeedBuilder({super.key});
@@ -21,7 +21,7 @@ class NewsFeedBuilder extends StatelessWidget {
                   child: NewsFeed());
             }),
         Container(
-          color: Colors.white.withOpacity(0.9),
+          color: const Color.fromARGB(229, 255, 255, 255),
           height: 30,
           width: double.infinity,
           child: const Padding(

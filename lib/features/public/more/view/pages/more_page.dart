@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_badriyya/features/public/view/home/widgets/custom_bottom_navigation_bar.dart';
-import 'package:project_badriyya/features/public/view/more/widgets/more_builder.dart';
+import 'package:project_badriyya/features/public/home/view/widgets/custom_bottom_navigation_bar.dart';
+import 'package:project_badriyya/features/public/more/view/widgets/more_builder.dart';
 
 class MorePage extends StatelessWidget {
   static const routePath = '/more';
@@ -50,7 +50,7 @@ class MorePage extends StatelessWidget {
             ),
           ),
           const Expanded(
-            flex: 10,
+            flex: 11,
             child: Padding(
               padding: EdgeInsets.only(left: 24.0, right: 24),
               child: MoreBuilder(),

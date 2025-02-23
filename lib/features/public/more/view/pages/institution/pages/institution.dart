@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_badriyya/features/public/view/more/pages/institution/pages/ustad_memorial_dars.dart';
-import 'package:project_badriyya/features/public/view/more/pages/institution/widgets/institution_card.dart';
+import 'package:project_badriyya/features/public/more/view/pages/institution/pages/ustad_memorial_dars.dart';
+import 'package:project_badriyya/features/public/more/view/pages/institution/widgets/institution_card.dart';
 
 class Institution extends StatelessWidget {
   const Institution({super.key});
