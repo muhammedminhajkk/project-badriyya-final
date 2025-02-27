@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:project_badriyya/features/public/home/view/widgets/update_text.dart';
+import 'package:project_badriyya/features/public/more/view/pages/Admission/widgets/text_field.dart';
 
 class AdmissionForm extends StatelessWidget {
   const AdmissionForm({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final nameController = TextEditingController();
+    final phoneNumberController = TextEditingController();
+    final dobController = TextEditingController();
+    final ageController = TextEditingController();
+    final pincodeController = TextEditingController();
+    final aadharNumberController = TextEditingController();
+    final fatherNameController = TextEditingController();
+    final fatherOccupationController = TextEditingController();
+    final fatherPhoneNumberController = TextEditingController();
+    final motherNameController = TextEditingController();
+    final motherOccupationController = TextEditingController();
+    final motherPhoneNumberController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Admission",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.teal),
-        ),
+        title: const GradientText("Admission"),
         backgroundColor: Colors.grey[300],
         leading: const BackButton(color: Colors.black),
       ),
@@ -20,9 +31,9 @@ class AdmissionForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             buildLabel("Student Name"),
-            buildTextField(),
+            buildTextField(nameController),
             buildLabel("Phone Number"),
-            buildTextField(),
+            buildTextField(phoneNumberController),
             Row(
               children: [
                 Expanded(
@@ -31,7 +42,7 @@ class AdmissionForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildLabel("Date of Birth"),
-                      buildTextField(),
+                      buildTextField(dobController),
                     ],
                   ),
                 ),
@@ -42,7 +53,7 @@ class AdmissionForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildLabel("Age"),
-                      buildTextField(),
+                      buildTextField(ageController),
                     ],
                   ),
                 ),
@@ -55,7 +66,7 @@ class AdmissionForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildLabel("State *"),
-                      buildDropdownButton(),
+                      const StateDropdown(),
                     ],
                   ),
                 ),
@@ -65,7 +76,7 @@ class AdmissionForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildLabel("District"),
-                      buildDropdownButton(),
+                      const StateDropdown(),
                     ],
                   ),
                 ),
@@ -78,7 +89,7 @@ class AdmissionForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildLabel("City"),
-                      buildDropdownButton(),
+                      const StateDropdown(),
                     ],
                   ),
                 ),
@@ -88,70 +99,39 @@ class AdmissionForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildLabel("Pincode"),
-                      buildTextField(),
+                      buildTextField(pincodeController),
                     ],
                   ),
                 ),
               ],
             ),
             buildLabel("Aadhar Number"),
-            buildTextField(),
+            buildTextField(aadharNumberController),
             buildLabel("Father Name"),
-            buildTextField(),
+            buildTextField(fatherNameController),
             buildLabel("Occupation"),
-            buildTextField(),
+            buildTextField(fatherOccupationController),
             buildLabel("Phone Number"),
-            buildTextField(),
+            buildTextField(fatherPhoneNumberController),
             buildLabel("Mother's Name"),
-            buildTextField(),
+            buildTextField(motherNameController),
             buildLabel("Occupation"),
-            buildTextField(),
+            buildTextField(motherOccupationController),
             buildLabel("Phone Number"),
-            buildTextField(),
+            buildTextField(motherPhoneNumberController),
+            const SizedBox(
+              height: 50,
+            ),
+            Center(
+              child: SizedBox(
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Submit"),
+                ),
+              ),
+            ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12.0, bottom: 4),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-      ),
-    );
-  }
-
-  Widget buildTextField() {
-    return const TextField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      ),
-    );
-  }
-
-  Widget buildDropdownButton() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          isExpanded: true,
-          value: null,
-          hint: const Text("Select Place"),
-          items: <String>["Option 1", "Option 2", "Option 3"]
-              .map((String value) => DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  ))
-              .toList(),
-          onChanged: (value) {},
         ),
       ),
     );

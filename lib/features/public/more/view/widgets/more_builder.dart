@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project_badriyya/features/public/more/view/pages/Admission/pages/admission.dart';
+import 'package:project_badriyya/features/public/more/view/pages/Donation/pages/donation_page.dart';
+import 'package:project_badriyya/features/public/more/view/pages/Enquiry/pages/enquiry.dart';
+import 'package:project_badriyya/features/public/more/view/pages/dua_request/pages/dua_request_page.dart';
 import 'package:project_badriyya/features/public/more/view/pages/institution/pages/institution.dart';
 import 'package:project_badriyya/features/public/more/view/widgets/more.dart';
 
@@ -21,21 +24,28 @@ class MoreBuilder extends StatelessWidget {
           backgroundColor: Colors.orange,
           iconColor: Colors.black,
           root: AdmissionForm()),
-      // const More(
-      //     name: "Enquiry",
-      //     icon: Icons.question_mark_rounded,
-      //     backgroundColor: Colors.purple,
-      //     iconColor: Colors.white),
-      // const More(
-      //     name: "Practical Islam",
-      //     icon: Icons.handshake,
-      //     backgroundColor: Colors.lightGreen,
-      //     iconColor: Colors.white),
-      // const More(
-      //     name: "Ourad",
-      //     icon: Icons.hexagon_outlined,
-      //     backgroundColor: Colors.red,
-      //     iconColor: Colors.yellow),
+      const More(
+        name: "Enquiry",
+        icon: Icons.question_mark_rounded,
+        backgroundColor: Colors.purple,
+        iconColor: Colors.white,
+        root: Enquiry(),
+      ),
+
+      const More(
+        name: "Dua Request",
+        icon: Icons.handshake,
+        backgroundColor: Colors.lightGreen,
+        iconColor: Colors.white,
+        root: DuaRequest(),
+      ),
+      const More(
+        name: "Donation",
+        icon: Icons.hexagon_outlined,
+        backgroundColor: Colors.red,
+        iconColor: Colors.yellow,
+        root: Donation(),
+      ),
       // const More(
       //     name: "Thuhfa",
       //     icon: Icons.calendar_month,
