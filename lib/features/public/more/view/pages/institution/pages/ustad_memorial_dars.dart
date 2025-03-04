@@ -76,7 +76,10 @@ class UstadMemorialDars extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text("Contact"),
+                        Text(
+                          "Contact",
+                          style: TextStyle(color: Colors.white),
+                        ),
                         SizedBox(width: 8), // Spacing before divider
                         Padding(
                           padding: EdgeInsets.only(top: 4.0, bottom: 4),
@@ -87,7 +90,10 @@ class UstadMemorialDars extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 8), // Spacing after divider
-                        Text("Gallery"),
+                        Text(
+                          "Gallery",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ],
                     ),
                   ),

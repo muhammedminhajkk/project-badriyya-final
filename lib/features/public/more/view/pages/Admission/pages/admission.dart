@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_badriyya/features/public/home/view/widgets/update_text.dart';
-import 'package:project_badriyya/features/public/more/view/pages/Admission/widgets/text_field.dart';
+import 'package:project_badriyya/features/public/more/view/widgets/text_field.dart';
 
 class AdmissionForm extends StatelessWidget {
   const AdmissionForm({super.key});
@@ -42,7 +42,7 @@ class AdmissionForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildLabel("Date of Birth"),
-                      buildTextField(dobController),
+                      buildDatePickerField(context, dobController),
                     ],
                   ),
                 ),
@@ -106,7 +106,7 @@ class AdmissionForm extends StatelessWidget {
               ],
             ),
             buildLabel("Aadhar Number"),
-            buildTextField(aadharNumberController),
+            buildTextField(aadharNumberController, hint: "**** **** ****"),
             buildLabel("Father Name"),
             buildTextField(fatherNameController),
             buildLabel("Occupation"),
@@ -126,7 +126,9 @@ class AdmissionForm extends StatelessWidget {
               child: SizedBox(
                 width: 200,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    print(dobController.text);
+                  },
                   child: const Text("Submit"),
                 ),
               ),

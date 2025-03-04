@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 Widget buildLabel(String text) {
   return Padding(
@@ -10,14 +11,19 @@ Widget buildLabel(String text) {
   );
 }
 
-Widget buildTextField(TextEditingController ctrlr) {
+Widget buildTextField(TextEditingController ctrlr, {String? hint}) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 8.0),
     child: TextField(
       controller: ctrlr,
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: InputDecoration(
+        hintText: hint?.isNotEmpty == true ? hint : null,
+        hintStyle: const TextStyle(
+          fontSize: 20,
+          color: Colors.grey,
+        ),
+        border: const OutlineInputBorder(),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
     ),
   );
@@ -92,4 +98,33 @@ class StateDropdownState extends State<StateDropdown> {
       ),
     );
   }
+}
+
+Widget buildDatePickerField(BuildContext context, TextEditingController ctrlr) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 8.0),
+    child: TextField(
+      controller: ctrlr,
+      readOnly: true,
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        hintText: "dd/mm/yyyy",
+        suffixIcon: Icon(Icons.calendar_today),
+      ),
+      onTap: () async {
+        DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(1900),
+          lastDate: DateTime.now(),
+        );
+
+        if (pickedDate != null) {
+          ctrlr.text = DateFormat("dd/MM/yyyy")
+              .format(pickedDate); // Formats as DD/MM/YYYY
+        }
+      },
+    ),
+  );
 }

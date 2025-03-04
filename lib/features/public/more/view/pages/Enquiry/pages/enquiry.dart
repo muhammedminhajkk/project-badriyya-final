@@ -12,7 +12,7 @@ class Enquiry extends StatelessWidget {
         title: const GradientText("Enquiry"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(26.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -28,7 +28,7 @@ class Enquiry extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildButton(Icons.person, "Contact", Colors.purple),
+                _buildButton(Icons.person, "Contact", Colors.blue),
                 _buildButton(Icons.location_on, "Location", Colors.black87),
               ],
             ),
@@ -37,9 +37,9 @@ class Enquiry extends StatelessWidget {
             // Form Fields
             _buildTextField("Name"),
             _buildTextField("Mobile Number"),
-            _buildTextField("Name"),
+            _buildTextField("Subject"),
 
-            const SizedBox(height: 20),
+            const Expanded(child: SizedBox(height: 20)),
 
             // Send Button
             Center(
@@ -82,6 +82,9 @@ class Enquiry extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 50,
+            )
           ],
         ),
       ),
