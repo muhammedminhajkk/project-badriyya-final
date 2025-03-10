@@ -1,80 +1,93 @@
 import 'package:flutter/material.dart';
+import 'package:project_badriyya/features/public/home/model/news_model.dart';
+import 'package:project_badriyya/features/public/home/view/pages/full_news_page.dart';
 
 class NewsFeed extends StatelessWidget {
-  const NewsFeed({super.key});
+  final NewsItem news;
+  const NewsFeed({super.key, required this.news});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          const Expanded(
-            flex: 17,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "ബദ്രിയ്യ നെഡിയനാട് സമ്മേളനം",
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  "മേയ് 02. 03. 04",
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  "നരിക്കുനി: നെഡിയനാട് ബദ്രിയ വാര്ഷിക സമ്മേളനം \"ഗ്രാറ്റോണിയം\" 2025 മേയ് 2,3,4 തീയതികളിൽ കാർക്കുളം ദർസിൽ നടക്കും. സി.അബ്ദുറഹ്മാൻ..",
-                  style: TextStyle(fontSize: 10, color: Colors.black),
-                  maxLines: 2, // Limiting the text to 2 lines
-                  overflow: TextOverflow
-                      .ellipsis, // Adding ellipsis if the text overflows
-                  softWrap: true, // Allowing the text to wrap
-                ),
-                Row(
-                  children: [
-                    Expanded(child: SizedBox()),
-                    Text(
-                      "Read More",
-                      style: TextStyle(fontSize: 9, color: Colors.blue),
-                    )
-                  ],
-                )
-              ],
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FullNewsPage(news: news)),
+        );
+      },
+      child: Container(
+        height: 120,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              spreadRadius: 2,
             ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            flex: 8,
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/newsfeed.png"),
-                  fit: BoxFit.contain,
+          ],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 17,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    news.blog.title,
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    news.blog.dateModified.toString().substring(0, 11),
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    news.blog.shortDesc,
+                    style: const TextStyle(fontSize: 10, color: Colors.black),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                  ),
+                  const Row(
+                    children: [
+                      Expanded(child: SizedBox()),
+                      Text(
+                        "Read More",
+                        style: TextStyle(fontSize: 9, color: Colors.blue),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              flex: 8,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                        "https://badriyya.in/timthumb/image?src=/app/webroot/img/post/${news.blog.image}&q=80&a=c&zc=1&ct=1&w=490&h=295"),
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

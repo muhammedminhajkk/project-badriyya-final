@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_badriyya/features/public/home/view/widgets/news_feed_builder.dart';
 import 'package:project_badriyya/features/public/more/view/pages/Admission/pages/admission.dart';
 import 'package:project_badriyya/features/public/more/view/pages/Donation/pages/donation_page.dart';
 import 'package:project_badriyya/features/public/more/view/pages/Enquiry/pages/enquiry.dart';
@@ -31,6 +32,13 @@ class MoreBuilder extends StatelessWidget {
         backgroundColor: Colors.purple,
         iconColor: Colors.white,
         root: Enquiry(),
+      ),
+      const More(
+        name: "Updates",
+        icon: Icons.handshake,
+        backgroundColor: Colors.blue,
+        iconColor: Colors.white,
+        root: NewsFeedBuilder(),
       ),
       const More(
         name: "Practical Islam",
@@ -76,15 +84,6 @@ class MoreBuilder extends StatelessWidget {
         iconColor: Colors.white,
         root: ComingSoon(
           tittle: "Programs",
-        ),
-      ),
-      const More(
-        name: "Updates",
-        icon: Icons.handshake,
-        backgroundColor: Colors.blue,
-        iconColor: Colors.white,
-        root: ComingSoon(
-          tittle: "Updates",
         ),
       ),
       const More(
