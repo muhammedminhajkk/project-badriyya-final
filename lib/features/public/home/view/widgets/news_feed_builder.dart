@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project_badriyya/features/public/home/controller/news_controller.dart';
 import 'package:project_badriyya/features/public/home/view/widgets/custom_bottom_navigation_bar.dart';
+import 'package:project_badriyya/features/public/home/view/widgets/dummy_news.dart';
 import 'package:project_badriyya/features/public/home/view/widgets/news_feed.dart';
 import 'package:project_badriyya/features/public/home/view/widgets/update_text.dart';
 
@@ -19,7 +20,7 @@ class NewsFeedBuilder extends ConsumerWidget {
               final news = snapshot.data;
               if (snapshot.connectionState == ConnectionState.waiting ||
                   news == null) {
-                return const Center(child: CircularProgressIndicator());
+                return const DummyNews();
               } else {
                 return ListView.builder(
                     itemCount: news.length + 1,
