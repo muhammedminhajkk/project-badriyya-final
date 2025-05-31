@@ -1,0 +1,96 @@
+import 'package:badriyya/core/navigation%20bar/dashboard_bottom_bar.dart';
+import 'package:badriyya/features/public/dashboard/teachers/model/teacher_period_model.dart';
+import 'package:badriyya/features/public/dashboard/teachers/pages/teacher_attendance_page.dart';
+import 'package:badriyya/features/public/dashboard/teachers/service/teacher_schedule_fetching.dart';
+import 'package:flutter/material.dart';
+
+import '../widgets/period_card.dart';
+
+class TeacherPeriodsPage extends StatelessWidget {
+  static const routePath = '/schedule';
+
+  const TeacherPeriodsPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: const Text(
+          "Today's Periods",
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF2C5364),
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+      ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFE0EAFC), Color(0xFFCFDEF3)],
+              ),
+            ),
+            child: FutureBuilder<List<TeacherPeriodModel>>(
+              future: fetchTeacherPeriods(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("Error: ${snapshot.error}"));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text("No periods found."));
+                }
+
+                final periods = snapshot.data!;
+
+                return ListView.builder(
+                  itemCount: periods.length,
+                  itemBuilder: (context, index) {
+                    final period = periods[index];
+                    return InkWell(
+                      onTap: () {
+                        print(
+                          "Tapped on period: ${period.subject}period: ${period.period} classId: ${period.classId}",
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder:
+                                (context) => PeriodPeoplePage(
+                                  periodName: period.subject,
+                                  classId: period.classId,
+                                  period: period.period,
+                                ),
+                          ),
+                        );
+                      },
+                      child: PeriodCard(
+                        subject: period.subject,
+                        hour: period.startTime,
+                        time: period.endTime,
+                        section: period.className,
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          const Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(left: 50, right: 50, bottom: 10),
+              child: DashboardBottomBar(currentIndex: 1),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
