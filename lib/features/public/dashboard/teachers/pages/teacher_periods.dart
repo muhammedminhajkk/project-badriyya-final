@@ -1,6 +1,6 @@
 import 'package:badriyya/core/navigation%20bar/dashboard_bottom_bar.dart';
 import 'package:badriyya/features/public/dashboard/teachers/model/teacher_period_model.dart';
-import 'package:badriyya/features/public/dashboard/teachers/pages/teacher_attendance_page.dart';
+import 'package:badriyya/features/public/dashboard/teachers/pages/student_with_attendance.dart';
 import 'package:badriyya/features/public/dashboard/teachers/service/teacher_schedule_fetching.dart';
 import 'package:flutter/material.dart';
 
@@ -56,16 +56,18 @@ class TeacherPeriodsPage extends StatelessWidget {
                     final period = periods[index];
                     return InkWell(
                       onTap: () {
-                        print(
-                          "Tapped on period: ${period.subject}period: ${period.period} classId: ${period.classId}",
-                        );
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder:
-                                (context) => PeriodPeoplePage(
-                                  periodName: period.subject,
-                                  classId: period.classId,
+                                (context) => StudentAttendancePage(
                                   period: period.period,
+                                  classId: period.classId,
+                                  date:
+                                      "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}",
+
+                                  // periodName: period.subject,
+                                  // classId: period.classId,
+                                  // period: period.period,
                                 ),
                           ),
                         );

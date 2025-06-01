@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<List<ClassPeriodModel>> fetchClassPeriods(String classid) async {
   final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('access_token');
-  // await prefs.remove('access_token');
 
   if (token == null) throw Exception('Access token not found');
 

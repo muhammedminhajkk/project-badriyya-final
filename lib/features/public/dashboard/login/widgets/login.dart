@@ -13,8 +13,8 @@ Future<bool> login(String email, String password) async {
       body: jsonEncode({'email': email, 'password': password}),
     );
 
-    print('Status code: ${response.statusCode}');
-    print('Response: ${response.body}');
+    // print('Status code: ${response.statusCode}');
+    // print('Response: ${response.body}');
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = jsonDecode(response.body);
@@ -28,18 +28,18 @@ Future<bool> login(String email, String password) async {
         await prefs.setString('refresh_token', refreshToken);
         await prefs.setString('user_id', userId);
 
-        print('✅ Login successful! Tokens and user ID saved.');
+        // print('✅ Login successful! Tokens and user ID saved.');
         return true;
       } else {
-        print('⚠️ One or more fields (token/user ID) missing in response.');
+        // print('⚠️ One or more fields (token/user ID) missing in response.');
         return false;
       }
     } else {
-      print('❌ Login failed with status: ${response.statusCode}');
+      // print('❌ Login failed with status: ${response.statusCode}');
       return false;
     }
   } catch (e) {
-    print('🔥 Error during login: $e');
+    // print('🔥 Error during login: $e');
     return false;
   }
 }
