@@ -1,6 +1,7 @@
 import 'package:badriyya/core/navigation%20bar/dashboard_bottom_bar.dart';
 import 'package:badriyya/features/public/dashboard/login/pages/login.dart';
 import 'package:badriyya/features/public/dashboard/teachers/model/class_model.dart';
+import 'package:badriyya/features/public/dashboard/teachers/pages/add_student.dart';
 import 'package:badriyya/features/public/dashboard/teachers/pages/class_periods.dart';
 import 'package:badriyya/features/public/dashboard/teachers/service/class_fetching.dart';
 import 'package:badriyya/features/public/home/home_page.dart';
@@ -20,16 +21,20 @@ class TeacherClassPage extends StatefulWidget {
 class _TeacherClassPageState extends State<TeacherClassPage> {
   late Future<List<ClassModel>> _futureClasses;
   late SharedPreferences prefs;
+  String? role;
 
   @override
   void initState() {
     super.initState();
-    _initPrefs();
-    _futureClasses = fetchClasses(); // initial load with cache
+    _initPrefsAndLoad();
   }
 
-  Future<void> _initPrefs() async {
+  Future<void> _initPrefsAndLoad() async {
     prefs = await SharedPreferences.getInstance();
+    setState(() {
+      role = prefs.getString('role');
+      _futureClasses = fetchClasses(); // initial load with cache
+    });
   }
 
   Future<void> _refreshClasses() async {
@@ -59,6 +64,23 @@ class _TeacherClassPageState extends State<TeacherClassPage> {
                   GoRouter.of(context).go(HomePage.routePath);
                 },
               ),
+              if (role == 'admin')
+                ListTile(
+                  leading: const Icon(Icons.person_add, color: Colors.green),
+                  title: const Text(
+                    "Add Students",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const AddStudentPage()),
+                    );
+                  },
+                ),
               ListTile(
                 leading: const Icon(Icons.logout, color: Colors.red),
                 title: const Text(
@@ -89,12 +111,17 @@ class _TeacherClassPageState extends State<TeacherClassPage> {
                           ],
                         ),
                   );
-                  //hey copilot auto fill after me,how can i fix the context issue ?
 
-                  if (context.mounted && confirm == true) {
+                  if (!mounted) return;
+
+                  if (confirm == true) {
                     Navigator.pop(context); // Close bottom sheet
-
                     await prefs.remove('access_token');
+                    await prefs.remove('refresh_token');
+                    await prefs.remove('user_id');
+
+                    await prefs.remove('role');
+                    if (!mounted) return;
                     GoRouter.of(context).go(Profile.routePath);
                   }
                 },
@@ -117,83 +144,94 @@ class _TeacherClassPageState extends State<TeacherClassPage> {
           const SizedBox(width: 15),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder<List<ClassModel>>(
-              future: _futureClasses,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text("Error: ${snapshot.error}"));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text("No classes found."));
-                }
-
-                final classes = snapshot.data!;
-
-                return RefreshIndicator(
-                  onRefresh: _refreshClasses,
-                  child: ListView.builder(
-                    itemCount: classes.length,
-                    itemBuilder: (context, index) {
-                      final classItem = classes[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => ClassPeriodListPage(
-                                    classId: classItem.id,
-                                  ),
-                            ),
+      body:
+          role == null
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                children: [
+                  Expanded(
+                    child: FutureBuilder<List<ClassModel>>(
+                      future: _futureClasses,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
                           );
-                        },
-                        child: Card(
-                          margin: const EdgeInsets.all(8),
-                          child: ListTile(
-                            leading: CircleAvatar(child: Text("${index + 1}")),
-                            title: Text(
-                              classItem.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            trailing: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.blueAccent.withAlpha(26),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                classItem.students.length.toString(),
-                                style: const TextStyle(
-                                  color: Colors.blueAccent,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text("Error: ${snapshot.error}"),
+                          );
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return const Center(child: Text("No classes found."));
+                        }
+
+                        final classes = snapshot.data!;
+
+                        return RefreshIndicator(
+                          onRefresh: _refreshClasses,
+                          child: ListView.builder(
+                            itemCount: classes.length,
+                            itemBuilder: (context, index) {
+                              final classItem = classes[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => ClassPeriodListPage(
+                                            classId: classItem.id,
+                                          ),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  margin: const EdgeInsets.all(8),
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      child: Text("${index + 1}"),
+                                    ),
+                                    title: Text(
+                                      classItem.name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    trailing: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.blueAccent.withAlpha(26),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        classItem.students.length.toString(),
+                                        style: const TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 50, right: 50, bottom: 10),
-            child: DashboardBottomBar(currentIndex: 0),
-          ),
-        ],
-      ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 50, right: 50, bottom: 10),
+                    child: DashboardBottomBar(currentIndex: 0),
+                  ),
+                ],
+              ),
     );
   }
 }

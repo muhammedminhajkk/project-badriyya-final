@@ -18,15 +18,18 @@ Future<bool> login(String email, String password) async {
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = jsonDecode(response.body);
+      print(data);
       final accessToken = data['access_token'];
       final refreshToken = data['refresh_token'];
-      final userId = data['user']['id'];
+      final userrole = data['user']['role'];
+      final userid = data['user']['id'];
 
-      if (accessToken != null && refreshToken != null && userId != null) {
+      if (accessToken != null && refreshToken != null && userrole != null) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('access_token', accessToken);
         await prefs.setString('refresh_token', refreshToken);
-        await prefs.setString('user_id', userId);
+        await prefs.setString('role', userrole);
+        await prefs.setString('user_id', userid);
 
         // print('✅ Login successful! Tokens and user ID saved.');
         return true;
