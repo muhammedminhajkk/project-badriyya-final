@@ -4,6 +4,7 @@ import 'package:badriyya/features/public/dashboard/teachers/pages/student_with_a
 import 'package:badriyya/features/public/dashboard/teachers/service/class_period_fetching.dart';
 import 'package:badriyya/features/public/dashboard/teachers/widgets/class_period_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ClassPeriodListPage extends StatefulWidget {
   final String classId;
@@ -15,11 +16,20 @@ class ClassPeriodListPage extends StatefulWidget {
 
 class _ClassPeriodListPageState extends State<ClassPeriodListPage> {
   late Future<List<ClassPeriodModel>> _futurePeriods;
+  String? role;
 
   @override
   void initState() {
     super.initState();
+    _loadData();
     _futurePeriods = fetchClassPeriods(widget.classId);
+  }
+
+  Future<void> _loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      role = prefs.getString('role');
+    });
   }
 
   Future<void> _refresh() async {
@@ -35,17 +45,18 @@ class _ClassPeriodListPageState extends State<ClassPeriodListPage> {
       appBar: AppBar(
         title: const Text("Class Periods"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddSchedule(classid: widget.classId),
-                ),
-              ).then((_) => _refresh());
-            },
-          ),
+          if (role == 'admin')
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddSchedule(classid: widget.classId),
+                  ),
+                ).then((_) => _refresh());
+              },
+            ),
         ],
       ),
       body: FutureBuilder<List<ClassPeriodModel>>(

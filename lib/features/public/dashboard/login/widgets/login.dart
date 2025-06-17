@@ -18,7 +18,6 @@ Future<bool> login(String email, String password) async {
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = jsonDecode(response.body);
-      print(data);
       final accessToken = data['access_token'];
       final refreshToken = data['refresh_token'];
       final userrole = data['user']['role'];
