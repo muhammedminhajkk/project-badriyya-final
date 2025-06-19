@@ -131,6 +131,7 @@ class _ProfileState extends State<Profile> {
                       if (success) {
                         GoRouter.of(context).go(TeacherClassPage.routePath);
                       } else {
+                        FocusScope.of(context).unfocus(); // Dismiss keyboard
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Login failed')),
                         );

@@ -8,12 +8,14 @@ class StudentAttendancePage extends StatefulWidget {
   final String classId;
   final String date;
   final int period;
+  final String subjectName; // <-- Add this
 
   const StudentAttendancePage({
     super.key,
     required this.classId,
     required this.date,
     required this.period,
+    required this.subjectName, // <-- Add this
   });
 
   @override
@@ -26,6 +28,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
   bool _loading = true;
   String? _error;
   bool _saving = false;
+  String? _removingId;
 
   @override
   void initState() {
@@ -61,6 +64,16 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
 
   void _toggle(String id, StudentAttendanceModel student) async {
     final isPresent = _presentIds.contains(id);
+
+    // If toggling OFF and attendance is not yet saved, just remove locally
+    if (isPresent && student.attendance == null) {
+      setState(() {
+        _presentIds.remove(id);
+      });
+      return;
+    }
+
+    // If toggling OFF and attendance is saved, ask for confirmation
     if (isPresent && student.attendance != null) {
       final confirm = await showDialog<bool>(
         context: context,
@@ -83,24 +96,36 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
             ),
       );
       if (confirm != true) return;
-      final success = await deleteAttendance(student.attendance!.id);
-      if (success) {
-        setState(() {
-          _presentIds.remove(id);
-        });
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("❌ Attendance removed")));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("⚠️ Failed to remove attendance")),
-        );
-      }
-    } else {
+
       setState(() {
-        _presentIds.add(id);
+        _removingId = id;
       });
+
+      final success = await deleteAttendance(student.attendance!.id);
+
+      if (!mounted) return;
+
+      setState(() {
+        _removingId = null;
+        if (success) {
+          _presentIds.remove(id);
+        }
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            success ? "❌ Attendance removed" : "⚠️ Failed to remove attendance",
+          ),
+        ),
+      );
+      return;
     }
+
+    // If toggling ON, just add locally
+    setState(() {
+      _presentIds.add(id);
+    });
   }
 
   Future<void> _saveAttendance() async {
@@ -150,7 +175,10 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(title: const Text("Mark Attendance")),
+          appBar: AppBar(
+            title: const Text("Mark Attendance"),
+            backgroundColor: Colors.teal,
+          ),
           body:
               _loading
                   ? const Center(child: CircularProgressIndicator())
@@ -158,20 +186,109 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                   ? Center(child: Text("Error: $_error"))
                   : Column(
                     children: [
+                      // Header with subject name and date
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 16,
+                        ),
+                        child: Card(
+                          color: Colors.teal.shade50,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      widget.subjectName,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    Text("Date: ${widget.date}"),
+                                  ],
+                                ),
+                                const Icon(Icons.class_, color: Colors.teal),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       Expanded(
-                        child: ListView.builder(
+                        child: ListView.separated(
                           itemCount: _students.length,
+                          separatorBuilder:
+                              (_, __) => const SizedBox(height: 8),
                           itemBuilder: (context, index) {
                             final student = _students[index];
                             final isPresent = _presentIds.contains(student.id);
-                            return ListTile(
-                              title: Text(
-                                "${student.firstName} ${student.lastName}",
+                            final initials =
+                                (student.firstName.isNotEmpty
+                                    ? student.firstName[0]
+                                    : '') +
+                                (student.lastName.isNotEmpty
+                                    ? student.lastName[0]
+                                    : '');
+                            return Card(
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 16,
                               ),
-                              subtitle: Text("ID: ${student.studentId}"),
-                              trailing: Switch(
-                                value: isPresent,
-                                onChanged: (_) => _toggle(student.id, student),
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor:
+                                      isPresent
+                                          ? Colors.teal
+                                          : Colors.grey.shade300,
+                                  child: Text(
+                                    initials.toUpperCase(),
+                                    style: TextStyle(
+                                      color:
+                                          isPresent
+                                              ? Colors.white
+                                              : Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                title: Text(
+                                  "${student.firstName} ${student.lastName}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color:
+                                        isPresent
+                                            ? Colors.teal.shade900
+                                            : Colors.black87,
+                                  ),
+                                ),
+                                // Removed subtitle (student ID)
+                                trailing:
+                                    _removingId == student.id
+                                        ? const SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                        : Switch(
+                                          value: isPresent,
+                                          activeColor: Colors.teal,
+                                          onChanged:
+                                              (_) =>
+                                                  _toggle(student.id, student),
+                                        ),
                               ),
                             );
                           },
@@ -179,9 +296,27 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16),
-                        child: ElevatedButton(
-                          onPressed: _saving ? null : _saveAttendance,
-                          child: const Text("Save Attendance"),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.teal,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 2,
+                            ),
+                            onPressed: _saving ? null : _saveAttendance,
+                            icon: const Icon(Icons.save),
+                            label: const Text(
+                              "Save Attendance",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],

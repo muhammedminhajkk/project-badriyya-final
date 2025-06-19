@@ -3,6 +3,7 @@ import 'package:badriyya/features/public/dashboard/teachers/pages/add_schedule.d
 import 'package:badriyya/features/public/dashboard/teachers/pages/student_with_attendance.dart';
 import 'package:badriyya/features/public/dashboard/teachers/service/class_period_fetching.dart';
 import 'package:badriyya/features/public/dashboard/teachers/widgets/class_period_widget.dart';
+import 'package:badriyya/features/public/dashboard/teachers/widgets/morning_and_evening_attendance_card.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,34 +67,91 @@ class _ClassPeriodListPageState extends State<ClassPeriodListPage> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          } else if (!snapshot.hasData) {
             return const Center(child: Text("No periods found."));
           }
 
-          final periods = snapshot.data!;
+          final periods = snapshot.data ?? [];
 
           return RefreshIndicator(
             onRefresh: _refresh,
             child: ListView.builder(
-              itemCount: periods.length,
+              itemCount: periods.length + 2,
               itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => StudentAttendancePage(
-                              classId: widget.classId,
-                              date:
-                                  "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}",
-                              period: periods[index].period,
-                            ),
-                      ),
-                    );
-                  },
-                  child: ClassPeriodWidget(model: periods[index]),
-                );
+                if (index == 0) {
+                  // Morning Attendance Card
+                  return MorningAndEveningAttendanceCard(
+                    title: "Add Morning Attendance",
+                    startColor: const Color(0xFF4F8FFF),
+                    endColor: const Color(0xFF6FE7DD),
+                    iconColor: const Color(0xFF4F8FFF),
+                    avatarBgColor: const Color(0xFFe3f0ff),
+                    textColor: const Color(0xFF1A237E),
+                    icon: Icons.wb_sunny,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => StudentAttendancePage(
+                                classId: widget.classId,
+                                date:
+                                    "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}",
+                                period: 11,
+                                subjectName: "Morning Attendance",
+                              ),
+                        ),
+                      );
+                    },
+                  );
+                } else if (index == periods.length + 1) {
+                  // Evening Attendance Card
+                  return MorningAndEveningAttendanceCard(
+                    title: "Add Evening Attendance",
+                    startColor: const Color(0xFFFF6F91),
+                    endColor: const Color(0xFFFFC371),
+                    iconColor: const Color(0xFFFF6F91),
+                    avatarBgColor: const Color(0xFFFFE3E3),
+                    textColor: const Color(0xFFB71C1C),
+                    icon: Icons.nights_stay,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => StudentAttendancePage(
+                                classId: widget.classId,
+                                date:
+                                    "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}",
+                                period: 12,
+                                subjectName: "Evening Attendance",
+                              ),
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  // Adjust index for periods list
+                  final periodIndex = index - 1;
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => StudentAttendancePage(
+                                classId: widget.classId,
+                                date:
+                                    "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}",
+                                period: periods[periodIndex].period,
+                                subjectName: periods[periodIndex].subject,
+                              ),
+                        ),
+                      );
+                    },
+                    child: ClassPeriodWidget(model: periods[periodIndex]),
+                  );
+                }
               },
             ),
           );

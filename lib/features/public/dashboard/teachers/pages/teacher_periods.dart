@@ -64,10 +64,7 @@ class TeacherPeriodsPage extends StatelessWidget {
                                   classId: period.classId,
                                   date:
                                       "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}",
-
-                                  // periodName: period.subject,
-                                  // classId: period.classId,
-                                  // period: period.period,
+                                  subjectName: period.subject,
                                 ),
                           ),
                         );
