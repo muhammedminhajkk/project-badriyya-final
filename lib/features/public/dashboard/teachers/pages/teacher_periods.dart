@@ -2,14 +2,42 @@ import 'package:badriyya/core/navigation%20bar/dashboard_bottom_bar.dart';
 import 'package:badriyya/features/public/dashboard/teachers/model/teacher_period_model.dart';
 import 'package:badriyya/features/public/dashboard/teachers/pages/student_with_attendance.dart';
 import 'package:badriyya/features/public/dashboard/teachers/service/teacher_schedule_fetching.dart';
+import 'package:badriyya/features/public/dashboard/teachers/widgets/modal_bottom_sheet.dart'; // Add this
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Add this
 
 import '../widgets/period_card.dart';
 
-class TeacherPeriodsPage extends StatelessWidget {
+class TeacherPeriodsPage extends StatefulWidget {
+  // Change to StatefulWidget
   static const routePath = '/schedule';
 
-  const TeacherPeriodsPage({Key? key}) : super(key: key);
+  final bool isMain;
+
+  const TeacherPeriodsPage({Key? key, this.isMain = true}) : super(key: key);
+
+  @override
+  State<TeacherPeriodsPage> createState() => _TeacherPeriodsPageState();
+}
+
+class _TeacherPeriodsPageState extends State<TeacherPeriodsPage> {
+  late SharedPreferences prefs;
+  String? role;
+  bool _prefsLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+
+  Future<void> _initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      role = prefs.getString('role');
+      _prefsLoaded = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +54,18 @@ class TeacherPeriodsPage extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
+        actions: [
+          if (_prefsLoaded)
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                if (role != null) {
+                  showSettingsSheet(context: context, role: role, prefs: prefs);
+                }
+              },
+            ),
+          const SizedBox(width: 15),
+        ],
       ),
       body: Stack(
         children: [
@@ -45,6 +85,7 @@ class TeacherPeriodsPage extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return Center(child: Text("Error: ${snapshot.error}"));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  print(widget.isMain);
                   return const Center(child: Text("No periods found."));
                 }
 
@@ -81,13 +122,14 @@ class TeacherPeriodsPage extends StatelessWidget {
               },
             ),
           ),
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(left: 50, right: 50, bottom: 10),
-              child: DashboardBottomBar(currentIndex: 1),
+          if (widget.isMain)
+            const Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(left: 50, right: 50, bottom: 10),
+                child: DashboardBottomBar(currentIndex: 0),
+              ),
             ),
-          ),
         ],
       ),
     );

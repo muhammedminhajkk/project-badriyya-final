@@ -20,19 +20,19 @@ class DashboardBottomBar extends StatelessWidget {
           Expanded(
             child: _buildNavItem(
               context,
-              Icons.class_, // Classes icon
-              "Classes",
+              Icons.schedule, // Schedules icon
+              "Schedules",
               0,
-              TeacherClassPage.routePath,
+              TeacherPeriodsPage.routePath,
             ),
           ),
           Expanded(
             child: _buildNavItem(
               context,
-              Icons.schedule, // Schedules icon
-              "Schedules",
+              Icons.class_, // Classes icon
+              "Classes",
               1,
-              TeacherPeriodsPage.routePath,
+              TeacherClassPage.routePath,
             ),
           ),
         ],

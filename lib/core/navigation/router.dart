@@ -40,9 +40,11 @@ final router = GoRouter(
     ),
     GoRoute(
       path: TeacherPeriodsPage.routePath,
-      pageBuilder:
-          (context, state) =>
-              const NoTransitionPage(child: TeacherPeriodsPage()),
+      pageBuilder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        final isMain = extra?['isMain'] as bool? ?? true;
+        return NoTransitionPage(child: TeacherPeriodsPage(isMain: isMain));
+      },
     ),
     GoRoute(
       path: ConfirmPage.routePath,

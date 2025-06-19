@@ -1,8 +1,11 @@
 import 'package:badriyya/core/navigation%20bar/custom_bottom_navigation_bar.dart';
 import 'package:badriyya/features/public/dashboard/login/widgets/login.dart';
 import 'package:badriyya/features/public/dashboard/teachers/pages/teacher_class.dart';
+import 'package:badriyya/features/public/dashboard/teachers/pages/teacher_periods.dart';
+import 'package:badriyya/features/public/dashboard/teachers/service/class_fetching.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   static const routePath = '/profile';
@@ -13,11 +16,11 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  bool isStudent = false;
-
   final TextEditingController registerNumberController =
       TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false; // Add this
+  bool _obscurePassword = true; // Add this
 
   @override
   void dispose() {
@@ -93,7 +96,7 @@ class _ProfileState extends State<Profile> {
                 TextField(
                   controller: registerNumberController,
                   decoration: InputDecoration(
-                    labelText: "Register Number",
+                    labelText: "Email",
                     prefixIcon: const Icon(Icons.person),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -103,12 +106,24 @@ class _ProfileState extends State<Profile> {
                 const SizedBox(height: 20),
                 TextField(
                   controller: passwordController,
-                  obscureText: true,
+                  obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     labelText: "Password",
                     prefixIcon: const Icon(Icons.lock),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
                     ),
                   ),
                 ),
@@ -124,12 +139,40 @@ class _ProfileState extends State<Profile> {
                   ),
                   child: TextButton(
                     onPressed: () async {
-                      final success = await login(
-                        registerNumberController.text.trim(),
-                        passwordController.text.trim(),
-                      );
+                      final regNo = registerNumberController.text.trim();
+                      final pwd = passwordController.text.trim();
+                      if (regNo.isEmpty || pwd.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please fill all fields'),
+                          ),
+                        );
+                        return;
+                      }
+                      setState(() => _isLoading = true);
+                      final success = await login(regNo, pwd);
+                      setState(() => _isLoading = false);
                       if (success) {
-                        GoRouter.of(context).go(TeacherClassPage.routePath);
+                        final prefs = await SharedPreferences.getInstance();
+                        final role = prefs.getString('role');
+                        if (role == 'admin') {
+                          GoRouter.of(context).go(TeacherClassPage.routePath);
+                        } else {
+                          final classlist = await fetchClasses();
+                          print(classlist);
+                          if (classlist.isNotEmpty) {
+                            print("not empty");
+                            GoRouter.of(
+                              context,
+                            ).go(TeacherPeriodsPage.routePath);
+                          } else {
+                            print('yes empty');
+                            GoRouter.of(context).go(
+                              TeacherPeriodsPage.routePath,
+                              extra: {'isMain': false},
+                            );
+                          }
+                        }
                       } else {
                         FocusScope.of(context).unfocus(); // Dismiss keyboard
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -152,6 +195,11 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
+          if (_isLoading)
+            Container(
+              color: Colors.black26,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
           const Align(
             alignment: Alignment.bottomCenter,
             child: Padding(

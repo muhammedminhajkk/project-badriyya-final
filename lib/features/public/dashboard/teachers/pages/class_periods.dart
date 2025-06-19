@@ -81,7 +81,7 @@ class _ClassPeriodListPageState extends State<ClassPeriodListPage> {
                 if (index == 0) {
                   // Morning Attendance Card
                   return MorningAndEveningAttendanceCard(
-                    title: "Add Morning Attendance",
+                    title: "Morning",
                     startColor: const Color(0xFF4F8FFF),
                     endColor: const Color(0xFF6FE7DD),
                     iconColor: const Color(0xFF4F8FFF),
@@ -107,7 +107,7 @@ class _ClassPeriodListPageState extends State<ClassPeriodListPage> {
                 } else if (index == periods.length + 1) {
                   // Evening Attendance Card
                   return MorningAndEveningAttendanceCard(
-                    title: "Add Evening Attendance",
+                    title: "Evening",
                     startColor: const Color(0xFFFF6F91),
                     endColor: const Color(0xFFFFC371),
                     iconColor: const Color(0xFFFF6F91),

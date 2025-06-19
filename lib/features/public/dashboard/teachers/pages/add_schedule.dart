@@ -63,7 +63,9 @@ class _AddScheduleState extends State<AddSchedule> {
         _isLoadingTeachers = false;
       });
     } catch (e) {
-      setState(() => _isLoadingTeachers = false);
+      if (mounted) {
+        setState(() => _isLoadingTeachers = false);
+      }
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Failed to load teachers: $e')));

@@ -1,12 +1,9 @@
 import 'package:badriyya/core/navigation%20bar/dashboard_bottom_bar.dart';
-import 'package:badriyya/features/public/dashboard/login/pages/login.dart';
 import 'package:badriyya/features/public/dashboard/teachers/model/class_model.dart';
-import 'package:badriyya/features/public/dashboard/teachers/pages/add_student.dart';
 import 'package:badriyya/features/public/dashboard/teachers/pages/class_periods.dart';
 import 'package:badriyya/features/public/dashboard/teachers/service/class_fetching.dart';
-import 'package:badriyya/features/public/home/home_page.dart';
+import 'package:badriyya/features/public/dashboard/teachers/widgets/modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TeacherClassPage extends StatefulWidget {
@@ -43,94 +40,6 @@ class _TeacherClassPageState extends State<TeacherClassPage> {
     });
   }
 
-  void _showSettingsSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder:
-          (context) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.home, color: Colors.blue),
-                title: const Text(
-                  "Go Home",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  GoRouter.of(context).go(HomePage.routePath);
-                },
-              ),
-              if (role == 'admin')
-                ListTile(
-                  leading: const Icon(Icons.person_add, color: Colors.green),
-                  title: const Text(
-                    "Add Students",
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const AddStudentPage()),
-                    );
-                  },
-                ),
-              ListTile(
-                leading: const Icon(Icons.logout, color: Colors.red),
-                title: const Text(
-                  "Logout",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onTap: () async {
-                  final confirm = await showDialog<bool>(
-                    context: context,
-                    builder:
-                        (_) => AlertDialog(
-                          title: const Text("Logout"),
-                          content: const Text(
-                            "Are you sure you want to logout?",
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, false),
-                              child: const Text("Cancel"),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, true),
-                              child: const Text("Logout"),
-                            ),
-                          ],
-                        ),
-                  );
-
-                  if (!mounted) return;
-
-                  if (confirm == true) {
-                    Navigator.pop(context); // Close bottom sheet
-                    await prefs.remove('access_token');
-                    await prefs.remove('refresh_token');
-                    await prefs.remove('user_id');
-
-                    await prefs.remove('role');
-                    if (!mounted) return;
-                    GoRouter.of(context).go(Profile.routePath);
-                  }
-                },
-              ),
-            ],
-          ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,7 +48,11 @@ class _TeacherClassPageState extends State<TeacherClassPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: _showSettingsSheet,
+            onPressed: () {
+              if (role != null) {
+                showSettingsSheet(context: context, role: role, prefs: prefs);
+              }
+            },
           ),
           const SizedBox(width: 15),
         ],
@@ -226,10 +139,11 @@ class _TeacherClassPageState extends State<TeacherClassPage> {
                       },
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 50, right: 50, bottom: 10),
-                    child: DashboardBottomBar(currentIndex: 0),
-                  ),
+                  if (role != 'admin') // Only show for non-admins
+                    const Padding(
+                      padding: EdgeInsets.only(left: 50, right: 50, bottom: 10),
+                      child: DashboardBottomBar(currentIndex: 1),
+                    ),
                 ],
               ),
     );
