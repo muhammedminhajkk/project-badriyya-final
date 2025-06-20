@@ -19,14 +19,57 @@ class _ProfileState extends State<Profile> {
   final TextEditingController registerNumberController =
       TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool _isLoading = false; // Add this
-  bool _obscurePassword = true; // Add this
+  bool _isLoading = false;
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
     registerNumberController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    final regNo = registerNumberController.text.trim();
+    final pwd = passwordController.text.trim();
+
+    if (regNo.isEmpty || pwd.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    final success = await login(regNo, pwd);
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    if (success) {
+      final prefs = await SharedPreferences.getInstance();
+      final role = prefs.getString('role');
+      if (!mounted) return;
+      if (role == 'admin') {
+        GoRouter.of(context).go(TeacherClassPage.routePath);
+      } else {
+        final classlist = await fetchClasses();
+        if (!mounted) return;
+        if (classlist.isNotEmpty) {
+          GoRouter.of(context).go(TeacherPeriodsPage.routePath);
+        } else {
+          GoRouter.of(
+            context,
+          ).go(TeacherPeriodsPage.routePath, extra: {'isMain': false});
+        }
+      }
+    } else {
+      if (!mounted) return;
+      FocusScope.of(context).unfocus(); // Dismiss keyboard
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Login failed')));
+    }
   }
 
   @override
@@ -138,48 +181,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   child: TextButton(
-                    onPressed: () async {
-                      final regNo = registerNumberController.text.trim();
-                      final pwd = passwordController.text.trim();
-                      if (regNo.isEmpty || pwd.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill all fields'),
-                          ),
-                        );
-                        return;
-                      }
-                      setState(() => _isLoading = true);
-                      final success = await login(regNo, pwd);
-                      setState(() => _isLoading = false);
-                      if (success) {
-                        final prefs = await SharedPreferences.getInstance();
-                        final role = prefs.getString('role');
-                        if (role == 'admin') {
-                          GoRouter.of(context).go(TeacherClassPage.routePath);
-                        } else {
-                          final classlist = await fetchClasses();
-                          print(classlist);
-                          if (classlist.isNotEmpty) {
-                            print("not empty");
-                            GoRouter.of(
-                              context,
-                            ).go(TeacherPeriodsPage.routePath);
-                          } else {
-                            print('yes empty');
-                            GoRouter.of(context).go(
-                              TeacherPeriodsPage.routePath,
-                              extra: {'isMain': false},
-                            );
-                          }
-                        }
-                      } else {
-                        FocusScope.of(context).unfocus(); // Dismiss keyboard
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Login failed')),
-                        );
-                      }
-                    },
+                    onPressed: _handleLogin,
                     child: const Text(
                       "Login",
                       style: TextStyle(

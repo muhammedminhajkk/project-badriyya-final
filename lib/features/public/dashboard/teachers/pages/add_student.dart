@@ -31,11 +31,13 @@ class _AddStudentPageState extends State<AddStudentPage> {
   Future<void> _loadClasses() async {
     try {
       final classes = await fetchClassestwo();
+      if (!mounted) return;
       setState(() {
         _classes = classes;
         _isLoadingClasses = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => _isLoadingClasses = false);
       ScaffoldMessenger.of(
         context,
@@ -46,6 +48,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedClassId == null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Please select a class")));
@@ -58,7 +61,6 @@ class _AddStudentPageState extends State<AddStudentPage> {
 
     final Map<String, dynamic> body = {
       "firstName": _formData['firstName'],
-      // "lastName": _formData['lastName'],
       "studentId": _formData['studentId'],
       "dob": _formData['dob'],
       "email": _formData['email'] ?? "student@gmail.com",
@@ -83,6 +85,8 @@ class _AddStudentPageState extends State<AddStudentPage> {
         body: json.encode(body),
       );
 
+      if (!mounted) return;
+
       if (res.statusCode == 200 || res.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Student added successfully")),
@@ -94,6 +98,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Error: $e")));
@@ -136,7 +141,6 @@ class _AddStudentPageState extends State<AddStudentPage> {
                         "motherPhone",
                         isPhone: true,
                       ),
-
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _submitForm,
@@ -203,6 +207,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
             lastDate: DateTime.now(),
           );
           if (picked != null) {
+            if (!mounted) return;
             setState(() {
               _formData[field] = "${picked.toLocal()}".split(' ')[0];
             });

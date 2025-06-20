@@ -25,11 +25,13 @@ class _ConfirmPageState extends State<ConfirmPage> {
       if (input.length == 4) {
         if (input == '1234') {
           final prefs = await SharedPreferences.getInstance();
+          if (!mounted) return;
           final role = prefs.getString('role');
           if (role == 'admin') {
             GoRouter.of(context).go(TeacherClassPage.routePath);
           } else {
             final classlist = await fetchClasses();
+            if (!mounted) return;
             if (classlist.isNotEmpty) {
               GoRouter.of(context).go(TeacherPeriodsPage.routePath);
             } else {
@@ -39,11 +41,12 @@ class _ConfirmPageState extends State<ConfirmPage> {
             }
           }
         } else {
-          // Incorrect PIN
+          if (!mounted) return;
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('Incorrect PIN')));
           await Future.delayed(const Duration(milliseconds: 300));
+          if (!mounted) return;
           setState(() {
             input = '';
           });

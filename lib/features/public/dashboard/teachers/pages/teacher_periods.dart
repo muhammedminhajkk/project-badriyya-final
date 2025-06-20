@@ -2,16 +2,14 @@ import 'package:badriyya/core/navigation%20bar/dashboard_bottom_bar.dart';
 import 'package:badriyya/features/public/dashboard/teachers/model/teacher_period_model.dart';
 import 'package:badriyya/features/public/dashboard/teachers/pages/student_with_attendance.dart';
 import 'package:badriyya/features/public/dashboard/teachers/service/teacher_schedule_fetching.dart';
-import 'package:badriyya/features/public/dashboard/teachers/widgets/modal_bottom_sheet.dart'; // Add this
+import 'package:badriyya/features/public/dashboard/teachers/widgets/modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Add this
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/period_card.dart';
 
 class TeacherPeriodsPage extends StatefulWidget {
-  // Change to StatefulWidget
   static const routePath = '/schedule';
-
   final bool isMain;
 
   const TeacherPeriodsPage({Key? key, this.isMain = true}) : super(key: key);
@@ -85,7 +83,6 @@ class _TeacherPeriodsPageState extends State<TeacherPeriodsPage> {
                 } else if (snapshot.hasError) {
                   return Center(child: Text("Error: ${snapshot.error}"));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  print(widget.isMain);
                   return const Center(child: Text("No periods found."));
                 }
 

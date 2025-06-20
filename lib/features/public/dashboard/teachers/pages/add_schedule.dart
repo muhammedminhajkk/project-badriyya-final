@@ -37,6 +37,8 @@ class _AddScheduleState extends State<AddSchedule> {
     'Sunday',
   ];
 
+  final List<int> _periods = List.generate(10, (index) => index + 1);
+
   @override
   void initState() {
     super.initState();
@@ -58,14 +60,14 @@ class _AddScheduleState extends State<AddSchedule> {
     setState(() => _isLoadingTeachers = true);
     try {
       final people = await fetchPeople();
+      if (!mounted) return;
       setState(() {
         _teachers = people.where((p) => p.role == 'teacher').toList();
         _isLoadingTeachers = false;
       });
     } catch (e) {
-      if (mounted) {
-        setState(() => _isLoadingTeachers = false);
-      }
+      if (!mounted) return;
+      setState(() => _isLoadingTeachers = false);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Failed to load teachers: $e')));
@@ -90,15 +92,15 @@ class _AddScheduleState extends State<AddSchedule> {
 
     try {
       final res = await http.post(
-        Uri.parse(
-          "https://api.badriyya.in/class/schedules",
-        ), // Change endpoint if needed
+        Uri.parse("https://api.badriyya.in/class/schedules"),
         headers: {
           'Authorization': 'Bearer $token',
           "Content-Type": "application/json",
         },
         body: json.encode(body),
       );
+
+      if (!mounted) return;
 
       if (res.statusCode == 200 || res.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -111,6 +113,7 @@ class _AddScheduleState extends State<AddSchedule> {
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Error: $e")));
@@ -129,9 +132,12 @@ class _AddScheduleState extends State<AddSchedule> {
           initialTime: TimeOfDay.now(),
         );
         if (picked != null) {
+          if (!mounted) return;
           final hour = picked.hour.toString().padLeft(2, '0');
           final minute = picked.minute.toString().padLeft(2, '0');
-          controller.text = '$hour:$minute';
+          setState(() {
+            controller.text = '$hour:$minute';
+          });
         }
       },
       child: AbsorbPointer(
@@ -204,16 +210,31 @@ class _AddScheduleState extends State<AddSchedule> {
                               val == null || val.isEmpty ? 'Required' : null,
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _periodController,
+                    DropdownButtonFormField<int>(
                       decoration: const InputDecoration(
                         labelText: 'Period',
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.timelapse),
                       ),
-                      keyboardType: TextInputType.number,
-                      validator:
-                          (v) => v == null || v.isEmpty ? 'Required' : null,
+                      value:
+                          _periodController.text.isNotEmpty
+                              ? int.tryParse(_periodController.text)
+                              : null,
+                      items:
+                          _periods
+                              .map(
+                                (period) => DropdownMenuItem(
+                                  value: period,
+                                  child: Text(period.toString()),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (val) {
+                        setState(() {
+                          _periodController.text = val?.toString() ?? '';
+                        });
+                      },
+                      validator: (val) => val == null ? 'Required' : null,
                     ),
                     const SizedBox(height: 16),
                     _buildTimeField(

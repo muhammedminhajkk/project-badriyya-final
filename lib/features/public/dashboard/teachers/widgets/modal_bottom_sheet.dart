@@ -3,6 +3,7 @@ import 'package:badriyya/features/public/dashboard/teachers/pages/add_student.da
 import 'package:badriyya/features/public/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> showSettingsSheet({
@@ -80,10 +81,13 @@ Future<void> showSettingsSheet({
 
                 if (confirm == true) {
                   Navigator.pop(context); // Close bottom sheet
-                  await prefs.remove('access_token');
-                  await prefs.remove('refresh_token');
-                  await prefs.remove('user_id');
-                  await prefs.remove('role');
+                  await prefs
+                      .clear(); // Removes all keys from SharedPreferences
+
+                  // Ensure the box is opened and use the correct type
+                  var classesBox = Hive.box<List>('classesBox');
+                  await classesBox.clear(); // Clears the Hive box
+
                   if (!context.mounted) return;
                   GoRouter.of(context).go(Profile.routePath);
                 }

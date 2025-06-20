@@ -40,7 +40,7 @@ class MorningAndEveningAttendanceCard extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: startColor.withOpacity(0.15),
+                color: startColor.withAlpha((0.15 * 255).toInt()),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
               ),
